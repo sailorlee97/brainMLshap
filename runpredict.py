@@ -92,31 +92,35 @@ select = range(20)
 features = X_test.iloc[select]
 features_display = X_test.loc[features.index]
 
+for i  in range(20):
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        shap_values = explainer.shap_values(features)[i]
+    shap.force_plot(expected_value, shap_values, features_display.iloc[i].apply(lambda x: round(x, 4)), matplotlib=True)
 
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore")
-    shap_values = explainer.shap_values(features)[1]
-    shap_interaction_values = explainer.shap_interaction_values(features)
-if isinstance(shap_interaction_values, list):
-    shap_interaction_values = shap_interaction_values[1]
-    # Our naive cutoff point is zero log odds (probability 0.5).
+# with warnings.catch_warnings():
+#     warnings.simplefilter("ignore")
+#     shap_values = explainer.shap_values(features)[1]
+#     shap_interaction_values = explainer.shap_interaction_values(features)
+# if isinstance(shap_interaction_values, list):
+#     shap_interaction_values = shap_interaction_values[1]
+#     # Our naive cutoff point is zero log odds (probability 0.5).
 
+# y_pred = model.predict(X_test)
+# shap.force_plot(expected_value, shap_values, features_display.iloc[1], matplotlib=True)
 
-y_pred = model.predict(X_test)
-shap.force_plot(expected_value, shap_values, features_display.iloc[1], matplotlib=True)
+# misclassified = y_pred != y_test
+# shap.decision_plot(expected_value, shap_values, features_display, link='logit', highlight=misclassified)
 
-misclassified = y_pred != y_test
-shap.decision_plot(expected_value, shap_values, features_display, link='logit', highlight=misclassified)
-
-shap.force_plot(expected_value, shap_values, X_test[0],feature_name,text_rotation=30,matplotlib=True)
-shap.decision_plot(expected_value, shap_values, features_display)
-### plot feature importance
-#fig, ax = plt.subplots(figsize=(15, 15))
-#plot_importance(model,
-#                height=0.5,
-#                ax=ax,
-#                max_num_features=64)
-plt.show()
+# shap.force_plot(expected_value, shap_values, X_test[0],feature_name,text_rotation=30,matplotlib=True)
+# shap.decision_plot(expected_value, shap_values, features_display)
+# ### plot feature importance
+# #fig, ax = plt.subplots(figsize=(15, 15))
+# #plot_importance(model,
+# #                height=0.5,
+# #                ax=ax,
+# #                max_num_features=64)
+# plt.show()
 
 ### make prediction for test data
 
